@@ -1,0 +1,258 @@
+.audio-player {
+  margin: 10px;
+  .rhap_container {
+    margin-bottom: 30px;
+    box-shadow: none;
+    background-color: #f1f5f8;
+    .rhap_progress-section {
+      display: none;
+    }
+    .rhap_controls-section {
+      margin: 0;
+      .rhap_additional-controls {
+        display: none;
+      }
+      .rhap_volume-controls {
+        display: none;
+      }
+    }
+
+    .rhap_main-controls {
+      .rhap_rewind-button {
+        display: none;
+      }
+      .rhap_forward-button {
+        display: none;
+      }
+      .rhap_play-pause-button {
+        color: #2792f7;
+        outline: none;
+        margin-left: 35px;
+      }
+
+    }
+  }
+  .audio-controls{
+    .forward, .rewind, .speed, .share{
+      position: absolute;
+      cursor: pointer;
+    }
+    .forward-button, .rewind-button{
+      width: 20px;
+    }
+    .forward{
+      top: 26px;
+      left: 110px;
+      .forward-by{
+        font-size: 10px;
+        position: absolute;
+        top: 8px;
+        left: 4px;
+        &:hover{
+          color: #2792f7;
+        }
+      }
+    }
+    .rewind{
+      top: 26px;
+      left: 30px;
+      .rewind-by{
+        font-size: 10px;
+        position: absolute;
+        top: 8px;
+        left: 4px;
+        &:hover{
+          color: #2792f7;
+        }
+      }
+    }
+
+    .speed{
+      top: 27px;
+      left: 150px;
+      border-radius: 12px;
+      border: 1px solid #e3e7e8;
+      padding: 5px;
+      outline: none;
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      text-indent: 1px;
+      text-overflow: '';
+    }
+    .share{
+      top: 20px;
+      right: 50px;
+    }
+  }
+  .time-span {
+    margin-left: 25px;
+    padding: 5px;
+    background-color: #EEF1F1;
+    border-radius: 5px;
+  }
+}
+
+
+.wave-form{
+  max-height: 100px;
+  margin-left: 30px;
+  margin-top: 39px;
+  margin-bottom: 3rem;
+  font-size: 19px;
+  width: 95%;
+  display: flex;
+  .transcript-percent{
+    min-width: 120px;
+    margin-right: 20px;
+    margin-top: 8px;
+    display: block;
+    .first-percent{
+      color: #967ee4;
+      margin-bottom: 15px;
+      font-weight: bold;
+    }
+    .second-percent{
+      color: #64afe9;
+      font-weight: bold;
+    }
+  }
+  .first-person{
+    margin-right: 10px;
+    border-bottom: 1px solid #F1F4F6;
+    display: flex;
+  }
+  .second-person{
+    display: flex;
+
+  }
+  .line-wave{
+    display: flex;
+    overflow: hidden;
+    .line{
+      border-left: 2px solid gray;
+      min-height: 40px;
+      margin-right: 2px;
+    }
+  }
+}
+
+
+.traversing-line{
+  border-right: 1px solid gray;
+  border-left: 1px solid gray;
+  height: 80px;
+  position: absolute;
+  top: 157px;
+  left: 170px;
+  cursor: pointer;
+  .moving-line {
+    border-right: 2px solid cornflowerblue;
+    height: 80px;
+    opacity: 0.4;
+    background-color: #eef8fe;
+  }
+}
+
+
+.search-input{
+  margin: 0 0 20px 40px;
+  display: flex;
+  .input {
+    padding: 6px 37px 5px 50px;
+    font-size: 17px;
+    border: 1px solid #D9DDE1;
+    border-radius: 6px;
+  }
+  .search-icon {
+    position: absolute;
+    top: 295px;
+    left: 61px;
+    height: 20px;
+  }
+
+  .result {
+    margin-left: 10px;
+  }
+
+  .clear-search {
+    margin-left: 10px;
+    cursor: pointer;
+    color: #6BABEC;
+  }
+}
+
+
+.searched-words {
+  padding: 5px 30px;
+  .searched{
+    display: flex;
+    min-height: 70px;
+
+    .first-person {
+      margin-right: 10px;
+      font-size: 20px;
+      color: mediumpurple !important;
+    }
+
+    .second-person {
+      margin-right: 10px;
+      font-size: 20px;
+      color: cornflowerblue !important;
+    }
+
+  }
+  .gray-box {
+    border-left: 1px solid #B5BDBD;
+    height: 50px;
+  }
+
+  .muted-text-span {
+    font-size: 18px;
+    margin-left: 10px;
+  }
+}
+
+
+.transcript-words{
+  padding: 10px 25px;
+  .line-divider {
+    border-left: 1px solid #B5BDBD;
+    height: 70px;
+  }
+
+  .transcript-container {
+    display: flex;
+    min-height: 70px;
+    margin-bottom: 20px;
+    padding: 5px;
+    border-radius: 5px;
+    .first-person, .second-person {
+      margin-right: 10px;
+      font-size: 16px;
+      font-weight: bold;
+    }
+    .first-person {
+      color: mediumpurple !important;
+    }
+
+    .second-person {
+      color: cornflowerblue !important;
+    }
+
+
+    .word-container {
+      font-size: 18px;
+      margin-left: 10px;
+      .word:hover {
+        background-color: lightblue;
+        cursor: pointer;
+        transition: 0.8s;
+      }
+    }
+  }
+
+  .share {
+    color: #6BABEC
+  }
+
+}
