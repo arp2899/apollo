@@ -1,58 +1,55 @@
 import React, {useContext, useState} from "react";
 import transcripts from "../../util/transcript.json";
-import {getFormatDateTime, getNumericalTime} from "../../util/util";
+import {getTimeInFormat, getApproxTimeInNumber} from "../../util/util";
 import "../../style.scss"
 import {ContextValues} from "../../context/ContextProvider";
 
 const Transcripts = () => {
   const { second, setSecond } = useContext(ContextValues);
   const { decaSecond, setDecaSecond } = useContext(ContextValues);
-  const [showShare, setShowShare] = useState(false);
 
   const time = second + decaSecond / 1000;
 
   const onWordClick = (time) => {
-    setSecond(Math.floor(getNumericalTime(time)));
+    setSecond(Math.floor(getApproxTimeInNumber(time)));
     setDecaSecond(
       Math.ceil(
-        (getNumericalTime(time) - Math.floor(getNumericalTime(time))) * 10
+        (getApproxTimeInNumber(time) - Math.floor(getApproxTimeInNumber(time))) * 10
       ) * 100
     );
-    setShowShare(true);
-    setTimeout(() => setShowShare(false), 3000);
   };
 
   return (
-    <div className="transcript-words">
+    <div className="transcripts">
       {transcripts.word_timings.map((sentence, index) => {
         const bg =
-          time >= getNumericalTime(sentence[0].startTime) &&
-          time <= getNumericalTime(sentence[sentence.length - 1].endTime)
+          time >= getApproxTimeInNumber(sentence[0].startTime) &&
+          time <= getApproxTimeInNumber(sentence[sentence.length - 1].endTime)
             ? "#f0fcff"
             : "";
         return (
           <div
-            className="transcript-container"
+            className="section"
             style={{
               marginLeft: index % 2 && "20px",
               backgroundColor: bg,
             }}
             key={index}
           >
-            <span className={index % 2 ? "second-person" : "first-person"}>
-              {getFormatDateTime(
+            <span className="transcript-time" style={{color: index%2 ? "cornflowerblue": "mediumpurple"}}>
+              {getTimeInFormat(
                 0,
-                Math.round(getNumericalTime(sentence[0].startTime))
+                Math.round(getApproxTimeInNumber(sentence[0].startTime))
               )}
             </span>
 
-            <span className="line-divider" />
+            <span className="divider" />
 
-            <span className="word-container">
+            <span className="transcript-words">
               {sentence.map((word, i) => (
                 <span onClick={() => onWordClick(word.startTime)} key={i}>
-                  {time >= getNumericalTime(word.startTime) &&
-                  time < getNumericalTime(word.endTime) ? (
+                  {time >= getApproxTimeInNumber(word.startTime) &&
+                  time < getApproxTimeInNumber(word.endTime) ? (
                     <a className="word">
                       <span style={{ backgroundColor: "lightblue" }}>
                         {word.word}
@@ -66,7 +63,6 @@ const Transcripts = () => {
                 </span>
               ))}
 
-              {showShare && <div className="share">share</div>}
             </span>
           </div>
         );

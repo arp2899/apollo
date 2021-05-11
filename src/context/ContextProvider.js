@@ -6,8 +6,7 @@ const ContextProvider = ({ children }) => {
   const [timerId, setTimerId] = useState(0);
   const [decaSecond, setDecaSecond] = useState(0);
   const [second, setSecond] = useState(0);
-  const [speed, setSpeed] = useState(100);
-  const [waveWidth, setWaveWidth] = useState(700);
+  const [seekBarWidth, setSeekBarWidth] = useState(1100);
   const [duration, setDuration] = useState(0);
 
   const memoidValue = useMemo(
@@ -20,10 +19,8 @@ const ContextProvider = ({ children }) => {
       setDecaSecond,
       second,
       setSecond,
-      speed,
-      setSpeed,
-      waveWidth,
-      setWaveWidth,
+      seekBarWidth,
+      setSeekBarWidth,
     }),
     [
       duration,
@@ -34,15 +31,15 @@ const ContextProvider = ({ children }) => {
       setDecaSecond,
       second,
       setSecond,
-      speed,
-      setSpeed,
-      waveWidth,
-      setWaveWidth,
+      seekBarWidth,
+      setSeekBarWidth,
     ]
   );
 
   return (
-    <ContextValues.Provider value={memoidValue}>{children}</ContextValues.Provider>
+    <ContextValues.Provider value={memoidValue}>
+      {children}
+    </ContextValues.Provider>
   );
 };
 

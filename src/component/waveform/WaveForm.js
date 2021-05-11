@@ -1,33 +1,23 @@
 import React, { useContext, useEffect, useState } from "react";
-import { getNumericalTime } from "../../util/util";
+import { getApproxTimeInNumber } from "../../util/util";
 import transcripts from "../../util/transcript.json";
 import LineWave from "./LineWave";
 import "../../style.scss";
-import {ContextValues} from "../../context/ContextProvider";
+import { ContextValues } from "../../context/ContextProvider";
 
 const WaveForm = () => {
   const { duration } = useContext(ContextValues);
-  const { waveWidth } = useContext(ContextValues);
-  const [totalWords, setTotalWords] = useState(0);
-  const [totalWordsFirstPerson, setTotalWordsFirstPerson] = useState(0);
+  const { seekBarWidth } = useContext(ContextValues);
+  const [firstPerson, setFirstPerson] = useState(0);
+  const [secondPerson, setSecondPerson] = useState(0);
 
   let prevMarginFirstPerson = 0;
-  let prevMarginSecondPerson = 0;
-
-  const getWaveLineMargin = (startTime, endTime, person) => {
-    let margin;
-    const prevMargin = (getNumericalTime(endTime) * waveWidth) / duration;
-    if (person === "first") {
-      margin =
-        (getNumericalTime(startTime) * waveWidth) / duration -
-        prevMarginFirstPerson;
-      prevMarginFirstPerson = prevMargin;
-    } else {
-      margin =
-        (getNumericalTime(startTime) * waveWidth) / duration -
-        prevMarginSecondPerson;
-      prevMarginSecondPerson = prevMargin;
-    }
+  const getWaveLineMargin = (startTime, endTime) => {
+    const prevMargin = (getApproxTimeInNumber(endTime) * seekBarWidth) / duration;
+    const margin =
+      (getApproxTimeInNumber(startTime) * seekBarWidth) / duration -
+      prevMarginFirstPerson;
+    prevMarginFirstPerson = prevMargin;
     return margin + "px";
   };
 
@@ -38,34 +28,31 @@ const WaveForm = () => {
     for (let i = 0; i < transcriptLength; i++) {
       total += transcripts.word_timings[i].length;
     }
-    setTotalWords(total);
     for (let j = 0; j < transcriptLength; j++) {
       if (j % 2 == 0) {
         wordsFirstPerson += transcripts.word_timings[j].length;
       }
     }
-    setTotalWordsFirstPerson(wordsFirstPerson);
+    const percent = Math.round((wordsFirstPerson / total) * 100);
+    setFirstPerson(percent);
+    setSecondPerson(100 - percent);
   }, []);
 
-  const firstPercent = Math.round((totalWordsFirstPerson / totalWords) * 100);
-  const secondPercent = 100 - firstPercent;
-
   return (
-    <div className="wave-form">
-      <div className="transcript-percent">
-        <div className="first-percent">{firstPercent} % You</div>
-        <div className="second-percent">{secondPercent} % Other</div>
+    <div className="wave-section">
+      <div className="person-word-percent">
+        <div className="first-person">{firstPerson} % You</div>
+        <div className="second-person">{secondPerson} % Other</div>
       </div>
-      <div className="wave">
+      <div className="axis">
         {transcripts.word_timings.map((transcript, index) => (
           <div key={index}>
             {index % 2 == 0 ? (
-              <div className="first-person">
+              <div className="upper-wave">
                 {transcript.map((word, index) => {
                   const marginLeft = getWaveLineMargin(
                     word.startTime,
-                    word.endTime,
-                    "first"
+                    word.endTime
                   );
                   return (
                     <WaveStripComps
@@ -79,12 +66,11 @@ const WaveForm = () => {
                 })}
               </div>
             ) : (
-              <div className="second-person">
+              <div className="lower-wave">
                 {transcript.map((word, index) => {
                   const marginLeft = getWaveLineMargin(
                     word.startTime,
-                    word.endTime,
-                    "second"
+                    word.endTime
                   );
                   return (
                     <WaveStripComps
@@ -108,7 +94,6 @@ const WaveForm = () => {
 const WaveStripComps = ({ marginLeft, startTime, endTime, color }) => {
   return (
     <div
-      className="wave-strip"
       style={{
         marginLeft,
       }}

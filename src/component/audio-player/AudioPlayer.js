@@ -1,34 +1,35 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
-import { getFormatDateTime, publicUrl } from "../../util/util";
+import { getTimeInFormat, getUrlPath } from "../../util/util";
 import "react-h5-audio-player/lib/styles.css";
 import "../../style.scss";
-import ReactAudioPlayer from 'react-h5-audio-player';
-import {ContextValues} from "../../context/ContextProvider";
+import ReactAudioPlayer from "react-h5-audio-player";
+import { ContextValues } from "../../context/ContextProvider";
 
 const AudioPlayer = () => {
   const audioRef = useRef(null);
 
-  const { timerId, setTimerId } = useContext(ContextValues);
-  const { second, setSecond } = useContext(ContextValues);
-  const { decaSecond, setDecaSecond } = useContext(ContextValues);
-  const { duration, setDuration } = useContext(ContextValues);
-  const { speed, setSpeed } = useContext(ContextValues);
-  const [startTimer, setStartTimer] = useState(0);
-
-  const time = second + decaSecond / 1000;
-
-
-  useEffect(() => {
-      audioRef.current.audio.current.currentTime = time;
-  }, [time]);
+  const {
+    timerId,
+    setTimerId,
+    second,
+    setSecond,
+    decaSecond,
+    setDecaSecond,
+    duration,
+    setDuration,
+  } = useContext(ContextValues);
 
   useEffect(() => {
-      let audio = audioRef.current.audio.current;
+    const time = second + decaSecond / 1000;
+    audioRef.current.audio.current.currentTime = time;
+  }, [decaSecond]);
 
-      audio.preload = "metadata";
-      audio.onloadedmetadata = () => {
-          setDuration(Math.round(audio.duration));
-      };
+  useEffect(() => {
+    let audio = audioRef.current.audio.current;
+    audio.preload = "metadata";
+    audio.onloadedmetadata = () => {
+      setDuration(Math.round(audio.duration));
+    };
   }, []);
 
   useEffect(() => {
@@ -36,24 +37,22 @@ const AudioPlayer = () => {
       setSecond((second) => second + 1);
       setDecaSecond(0);
     }
-    setDecaSecond((decaSecond) => decaSecond + speed);
-  }, [startTimer]);
+  }, [decaSecond]);
 
   const onPlay = () => {
-    const timerId = window.setInterval(
-      () => setStartTimer((startTimer) => startTimer + 1),
+    const timerId = setInterval(
+      () => setDecaSecond((decaSecond) => decaSecond + 100),
       100
     );
     setTimerId(timerId);
   };
 
   const onPause = () => {
-    window.clearInterval(timerId);
-    setStartTimer(0);
+    clearInterval(timerId);
   };
 
   const onEnded = () => {
-    window.clearInterval(timerId);
+    clearInterval(timerId);
     setSecond(0);
     setDecaSecond(0);
   };
@@ -65,48 +64,40 @@ const AudioPlayer = () => {
     }
   }, [second]);
 
-  const onRewind = () => {
-    setSecond((second) => second - 10);
-  };
-
-  const durationMinute = Math.floor(duration / 60);
-  const durationSecond = duration % 60;
-
   return (
-    <div className="audio-player">
-
+    <div className="player">
       <ReactAudioPlayer
-          src={"audio/audio.wav"}
-          onPlay={onPlay}
-          onPause={onPause}
-          onEnded={onEnded}
-          ref={audioRef}
+        ref={audioRef}
+        src={"audio/audio.wav"}
+        onPlay={onPlay}
+        onPause={onPause}
+        onEnded={onEnded}
       />
-      <div className="audio-controls">
+      <div className="controls">
         <div
-          className="forward"
+          className="forward-button"
           onClick={() => setSecond((second) => second + 10)}
         >
           <img
-            src={publicUrl("/img/rotate-right.svg")}
-            className="forward-button"
+            src={getUrlPath("/img/rotate-right.svg")}
+            className="forward-image"
             alt={"forward"}
           />
-          <span className="forward-by">10</span>
+          <span className="forward-time">10</span>
         </div>
-        <div className="rewind" onClick={onRewind}>
+        <div
+          className="rewind-button"
+          onClick={() => setSecond((second) => second - 10)}
+        >
           <img
-            src={publicUrl("/img/rotate-left.svg")}
-            className="rewind-button"
+            src={getUrlPath("/img/rotate-left.svg")}
+            className="rewind-image"
             alt={"rewind"}
           />
-          <span className="rewind-by">10</span>
+          <span className="rewind-time">10</span>
         </div>
         <div>
-          <select
-            className="speed"
-            onInput={(e) => setSpeed(100 * parseFloat(e.currentTarget.value))}
-          >
+          <select className="speed-input">
             <option value="1">1.00x</option>
             <option value="0.5">0.50x</option>
             <option value="0.75">0.75x</option>
@@ -114,16 +105,15 @@ const AudioPlayer = () => {
             <option value="2.0">2.00x</option>
           </select>
         </div>
-        <div className="share">
-          <img src={publicUrl("/img/share.png")} alt={"share"} />
+        <div className="share-image">
+          <img src={getUrlPath("/img/share.png")} alt={"share"} />
         </div>
       </div>
 
-      <span className="time-span">
-        <span style={{ fontWeight: 600 }}>{getFormatDateTime(0, second)}</span>{" "}
-        /{" "}
-        <span style={{ fontWeight: 600, color: "#a8acad" }}>
-          {getFormatDateTime(durationMinute, durationSecond)}
+      <span className="duration">
+        <span>{getTimeInFormat(0, second)}</span> /{" "}
+        <span style={{ color: "#a8acad" }}>
+          {getTimeInFormat(Math.floor(duration / 60), duration % 60)}
         </span>
       </span>
     </div>
