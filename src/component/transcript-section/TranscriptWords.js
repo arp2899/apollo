@@ -1,8 +1,7 @@
 import React, {useContext} from "react";
-import transcripts from "../../data/transcript.json";
-import {getApproxTimeInNumber, getTimeInFormat} from "../../util/utils";
-import "../../style.scss"
+import "../../style.scss";
 import {ContextValues} from "../../context/ContextProvider";
+import {transcriptData} from "../../util/utils";
 
 const TranscriptWords = () => {
   const { second, setSecond } = useContext(ContextValues);
@@ -11,20 +10,18 @@ const TranscriptWords = () => {
   const time = second + milliSecond / 1000;
 
   const setTimeAtWordClick = (time) => {
-    setSecond(Math.floor(getApproxTimeInNumber(time)));
+    setSecond(Math.floor(parseFloat(time)));
     setMilliSecond(
-      Math.ceil(
-        (getApproxTimeInNumber(time) - Math.floor(getApproxTimeInNumber(time))) * 10
-      ) * 100
+      Math.ceil((parseFloat(time) - Math.floor(parseFloat(time))) * 10) * 100
     );
   };
 
   return (
     <div className="transcripts">
-      {transcripts.word_timings.map((sentence, index) => {
+      {transcriptData.word_timings.map((sentence, index) => {
         const bg =
-          time >= getApproxTimeInNumber(sentence[0].startTime) &&
-          time <= getApproxTimeInNumber(sentence[sentence.length - 1].endTime)
+          time >= parseFloat(sentence[0].startTime) &&
+          time <= parseFloat(sentence[sentence.length - 1].endTime)
             ? "#f0fcff"
             : "";
         return (
@@ -36,20 +33,28 @@ const TranscriptWords = () => {
             }}
             key={index}
           >
-            <span className="transcript-time" style={{color: index%2 ? "cornflowerblue": "mediumpurple"}}>
-              {getTimeInFormat(
-                0,
-                Math.round(getApproxTimeInNumber(sentence[0].startTime))
-              )}
+            <span
+              className="transcript-time"
+              style={{ color: index % 2 ? "#339ed4" : "#a135d4" }}
+            >
+              <span>00</span>:
+              <span>
+                {("00" + Math.round(parseFloat(sentence[0].startTime))).slice(
+                  -2
+                )}
+              </span>
             </span>
 
             <span className="divider" />
 
             <span className="transcript-words">
               {sentence.map((word, i) => (
-                <span onClick={() => setTimeAtWordClick(word.startTime)} key={i}>
-                  {time >= getApproxTimeInNumber(word.startTime) &&
-                  time < getApproxTimeInNumber(word.endTime) ? (
+                <span
+                  onClick={() => setTimeAtWordClick(word.startTime)}
+                  key={i}
+                >
+                  {time >= parseFloat(word.startTime) &&
+                  time < parseFloat(word.endTime) ? (
                     <a className="word">
                       <span style={{ backgroundColor: "lightblue" }}>
                         {word.word}
@@ -62,7 +67,6 @@ const TranscriptWords = () => {
                   )}
                 </span>
               ))}
-
             </span>
           </div>
         );

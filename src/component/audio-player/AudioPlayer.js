@@ -1,5 +1,4 @@
 import React, {useContext, useEffect, useRef} from "react";
-import {getTimeInFormat, getUrlPath} from "../../util/utils";
 import "react-h5-audio-player/lib/styles.css";
 import "../../style.scss";
 import ReactAudioPlayer from "react-h5-audio-player";
@@ -27,8 +26,7 @@ const AudioPlayer = () => {
   }, []);
 
   useEffect(() => {
-    const time = second + milliSecond / 1000;
-    audioRef.current.audio.current.currentTime = time;
+    audioRef.current.audio.current.currentTime = second + milliSecond / 1000;
   }, [milliSecond]);
 
   const onPlay = () => {
@@ -53,7 +51,7 @@ const AudioPlayer = () => {
   };
 
   useEffect(() => {
-    if (second < 0) {
+    if (second < 0 || second > duration) {
       setSecond(0);
       setMilliSecond(0);
     }
@@ -74,41 +72,38 @@ const AudioPlayer = () => {
           onClick={() => setSecond((second) => second + 10)}
         >
           <img
-            src={getUrlPath("/img/rotate-right.svg")}
+            src={"/img/rotate-right.svg"}
             className="forward-image"
             alt={"forward"}
           />
-          <div className="forward-time">10</div>
         </div>
         <div
           className="rewind-button"
           onClick={() => setSecond((second) => second - 10)}
         >
           <img
-            src={getUrlPath("/img/rotate-left.svg")}
+            src={"/img/rotate-left.svg"}
             className="rewind-image"
             alt={"rewind"}
           />
-          <div className="rewind-time">10</div>
         </div>
         <div>
           <select className="speed-input" disabled={true}>
-            <option value="1">1.00x</option>
-            <option value="0.5">0.50x</option>
-            <option value="0.75">0.75x</option>
-            <option value="1.5">1.50x</option>
-            <option value="2.0">2.00x</option>
+            <option value="1">1.0 x</option>
           </select>
         </div>
         <div className="share-image">
-          <img src={getUrlPath("/img/share.png")} alt={"share"} />
+          <img src={"/img/share.png"} alt={"share"} />
         </div>
       </div>
 
       <span className="duration">
-        <span>{getTimeInFormat(0, second)}</span> /{" "}
-        <span style={{ color: "#a8acad" }}>
-          {getTimeInFormat(Math.floor(duration / 60), duration % 60)}
+        <span>00</span>:<span>{("00" + second).slice(-2)}</span> /{" "}
+        <span style={{ color: "#919394" }}>
+          {("00" + Math.floor(duration / 60)).slice(-2)}:
+        </span>
+        <span style={{ color: "#919394" }}>
+          {("00" + Math.floor(duration % 60)).slice(-2)}
         </span>
       </span>
     </div>

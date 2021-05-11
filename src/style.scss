@@ -41,39 +41,21 @@
     }
     .forward-image,
     .rewind-image {
-      width: 20px;
+      width: 16px;
     }
     .forward-button {
-      top: 26px;
+      top: 29px;
       left: 110px;
-      .forward-time {
-        font-size: 10px;
-        position: absolute;
-        top: 8px;
-        left: 4px;
-        &:hover {
-          color: #2792f7;
-        }
-      }
     }
     .rewind-button {
-      top: 26px;
-      left: 30px;
-      .rewind-time {
-        font-size: 10px;
-        position: absolute;
-        top: 8px;
-        left: 4px;
-        &:hover {
-          color: #2792f7;
-        }
-      }
+      top: 29px;
+      left: 33px;
     }
 
     .speed-input {
       top: 27px;
       left: 150px;
-      border-radius: 12px;
+      border-radius: 7px;
       border: 1px solid #e3e7e8;
       padding: 5px;
       outline: none;
@@ -84,7 +66,7 @@
     }
     .share-image {
       top: 20px;
-      right: 50px;
+      right: 45px;
     }
   }
   .duration {
@@ -92,7 +74,8 @@
     padding: 5px;
     background-color: #eef1f1;
     border-radius: 5px;
-    font-weight: 600;
+    font-weight: 500;
+    font-size: 15px;
   }
 }
 
@@ -109,13 +92,15 @@
     margin-top: 8px;
     display: block;
     .first-person {
-      color: #967ee4;
+      color: #a135d4;
       margin-bottom: 15px;
-      font-weight: bold;
+      font-size: 15px;
+      font-weight: 600;
     }
     .second-person {
-      color: #64afe9;
-      font-weight: bold;
+      color: #339ed4;
+      font-size: 15px;
+      font-weight: 600;
     }
   }
   .axis {
@@ -130,6 +115,7 @@
         #a135d4 0px,
         #ccc 4px
       );
+      min-height: 40px;
     }
 
     .lower-wave {
@@ -142,20 +128,40 @@
         #339ed4 0px,
         #ccc 4px
       );
-    }
-
-    .strip {
-      display: flex;
-      overflow: hidden;
       min-height: 40px;
-
     }
+      .upper-wave-overlay {
+        border-bottom: 1px solid #f1f4f6;
+        display: flex;
+        transform: translateY(-40px);
+        background: repeating-linear-gradient(
+                        90deg,
+                        transparent,
+                        transparent 2px,
+                        gray 0px,
+                        #ccc 4px
+        );
+        min-height: 40px;
+      }
+
+      .lower-wave-overlay {
+        display: flex;
+        position: relative;
+        background: repeating-linear-gradient(
+                        90deg,
+                        transparent,
+                        transparent 2px,
+                        gray 0px,
+                        #ccc 4px
+        );
+        min-height: 40px;
+      }
   }
 }
 
 .seek-bar {
-  border-right: 1px solid gray;
-  border-left: 1px solid gray;
+  border-right: 1px solid #b8bdbf;
+  border-left: 1px solid #b8bdbf;
   height: 80px;
   position: absolute;
   top: 157px;
@@ -164,8 +170,12 @@
   .seek-line {
     border-right: 2px solid cornflowerblue;
     height: 80px;
-    opacity: 0.7;
+    opacity: 0.4;
     background-color: #eef8fe;
+  }
+  .horizontal-line{
+    border-top: 1px solid #e6ebed;
+    transform: translateY(-40px);
   }
 }
 
@@ -173,26 +183,16 @@
   margin: 0 0 20px 30px;
   display: flex;
   .search-input {
-    padding: 6px 37px 5px 50px;
-    font-size: 17px;
+    padding: 8px 39px 7px 52px;
+    font-size: 16px;
     border: 1px solid #d9dde1;
-    border-radius: 6px;
+    border-radius: 10px;
   }
   .icon {
     position: absolute;
     top: 8px;
     left: 20px;
     height: 20px;
-  }
-
-  .result {
-    margin-left: 10px;
-  }
-
-  .clear-search {
-    margin-left: 10px;
-    cursor: pointer;
-    color: #6babec;
   }
 }
 
@@ -204,23 +204,23 @@
     min-height: 70px;
     margin-bottom: 20px;
     padding: 5px;
-    border-radius: 5px;
     .transcript-time {
       margin-right: 10px;
-      font-size: 16px;
+      font-size: 15px;
       font-weight: bold;
     }
 
     .divider {
-      border-left: 1px solid #b5bdbd;
+      border-left: 1px solid #dce3e6;
       height: 70px;
     }
 
     .transcript-words {
-      font-size: 18px;
+      font-size: 17px;
       margin-left: 10px;
+      font-weight: 400;
       .word:hover {
-        background-color: lightblue;
+        background-color: #bdeafc;
         cursor: pointer;
         transition: 0.8s;
       }
