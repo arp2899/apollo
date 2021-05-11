@@ -1,18 +1,18 @@
-import React, {useContext, useState} from "react";
-import transcripts from "../../util/transcript.json";
-import {getTimeInFormat, getApproxTimeInNumber} from "../../util/util";
+import React, {useContext} from "react";
+import transcripts from "../../data/transcript.json";
+import {getApproxTimeInNumber, getTimeInFormat} from "../../util/utils";
 import "../../style.scss"
 import {ContextValues} from "../../context/ContextProvider";
 
-const Transcripts = () => {
+const TranscriptWords = () => {
   const { second, setSecond } = useContext(ContextValues);
-  const { decaSecond, setDecaSecond } = useContext(ContextValues);
+  const { milliSecond, setMilliSecond } = useContext(ContextValues);
 
-  const time = second + decaSecond / 1000;
+  const time = second + milliSecond / 1000;
 
-  const onWordClick = (time) => {
+  const setTimeAtWordClick = (time) => {
     setSecond(Math.floor(getApproxTimeInNumber(time)));
-    setDecaSecond(
+    setMilliSecond(
       Math.ceil(
         (getApproxTimeInNumber(time) - Math.floor(getApproxTimeInNumber(time))) * 10
       ) * 100
@@ -47,7 +47,7 @@ const Transcripts = () => {
 
             <span className="transcript-words">
               {sentence.map((word, i) => (
-                <span onClick={() => onWordClick(word.startTime)} key={i}>
+                <span onClick={() => setTimeAtWordClick(word.startTime)} key={i}>
                   {time >= getApproxTimeInNumber(word.startTime) &&
                   time < getApproxTimeInNumber(word.endTime) ? (
                     <a className="word">
@@ -71,4 +71,4 @@ const Transcripts = () => {
   );
 };
 
-export default Transcripts;
+export default TranscriptWords;

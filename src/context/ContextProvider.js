@@ -4,9 +4,9 @@ export const ContextValues = React.createContext({});
 
 const ContextProvider = ({ children }) => {
   const [timerId, setTimerId] = useState(0);
-  const [decaSecond, setDecaSecond] = useState(0);
+  const [milliSecond, setMilliSecond] = useState(0);
   const [second, setSecond] = useState(0);
-  const [seekBarWidth, setSeekBarWidth] = useState(1100);
+  const [seekBarWidth, setSeekBarWidth] = useState(1060);
   const [duration, setDuration] = useState(0);
 
   const memoidValue = useMemo(
@@ -15,8 +15,8 @@ const ContextProvider = ({ children }) => {
       setDuration,
       timerId,
       setTimerId,
-      decaSecond,
-      setDecaSecond,
+      milliSecond,
+      setMilliSecond,
       second,
       setSecond,
       seekBarWidth,
@@ -27,8 +27,8 @@ const ContextProvider = ({ children }) => {
       setDuration,
       timerId,
       setTimerId,
-      decaSecond,
-      setDecaSecond,
+      milliSecond,
+      setMilliSecond,
       second,
       setSecond,
       seekBarWidth,

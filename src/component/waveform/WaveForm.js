@@ -1,25 +1,29 @@
 import React, { useContext, useEffect, useState } from "react";
-import { getApproxTimeInNumber } from "../../util/util";
-import transcripts from "../../util/transcript.json";
-import LineWave from "./LineWave";
+import { getApproxTimeInNumber } from "../../util/utils";
+import transcripts from "../../data/transcript.json";
+import WaveLine from "./WaveLine";
 import "../../style.scss";
 import { ContextValues } from "../../context/ContextProvider";
 
 const WaveForm = () => {
-  const { duration } = useContext(ContextValues);
-  const { seekBarWidth } = useContext(ContextValues);
-  const [firstPerson, setFirstPerson] = useState(0);
-  const [secondPerson, setSecondPerson] = useState(0);
+  const { duration, seekBarWidth } = useContext(ContextValues);
+  const [firstPersonWordPercent, setFirstPersonWordPercent] = useState(0);
+  const [secondPersonWordPercent, setSecondPersonWordPercent] = useState(0);
 
-  let prevMarginFirstPerson = 0;
-  const getWaveLineMargin = (startTime, endTime) => {
-    const prevMargin = (getApproxTimeInNumber(endTime) * seekBarWidth) / duration;
+  let previousMargin = 0;
+  const getMarginForWord = (startTime, endTime) => {
     const margin =
       (getApproxTimeInNumber(startTime) * seekBarWidth) / duration -
-      prevMarginFirstPerson;
-    prevMarginFirstPerson = prevMargin;
+      previousMargin;
+    previousMargin = (getApproxTimeInNumber(endTime) * seekBarWidth) / duration;
+
     return margin + "px";
   };
+
+  const getWidth = (startTime, endTime) =>{
+    return (parseFloat(endTime) - parseFloat(startTime)) * seekBarWidth/duration
+
+  }
 
   useEffect(() => {
     let total = 0,
@@ -29,78 +33,63 @@ const WaveForm = () => {
       total += transcripts.word_timings[i].length;
     }
     for (let j = 0; j < transcriptLength; j++) {
-      if (j % 2 == 0) {
+      if (j % 2 === 0) {
         wordsFirstPerson += transcripts.word_timings[j].length;
       }
     }
     const percent = Math.round((wordsFirstPerson / total) * 100);
-    setFirstPerson(percent);
-    setSecondPerson(100 - percent);
+    setFirstPersonWordPercent(percent);
+    setSecondPersonWordPercent(100 - percent);
   }, []);
 
   return (
     <div className="wave-section">
       <div className="person-word-percent">
-        <div className="first-person">{firstPerson} % You</div>
-        <div className="second-person">{secondPerson} % Other</div>
+        <div className="first-person">{firstPersonWordPercent} % You</div>
+        <div className="second-person">{secondPersonWordPercent} % Other</div>
       </div>
       <div className="axis">
-        {transcripts.word_timings.map((transcript, index) => (
-          <div key={index}>
-            {index % 2 == 0 ? (
-              <div className="upper-wave">
-                {transcript.map((word, index) => {
-                  const marginLeft = getWaveLineMargin(
-                    word.startTime,
-                    word.endTime
-                  );
-                  return (
-                    <WaveStripComps
-                      marginLeft={marginLeft}
-                      color={"#967ee4"}
-                      startTime={word.startTime}
-                      endTime={word.endTime}
-                      key={index}
-                    />
-                  );
-                })}
-              </div>
-            ) : (
-              <div className="lower-wave">
-                {transcript.map((word, index) => {
-                  const marginLeft = getWaveLineMargin(
-                    word.startTime,
-                    word.endTime
-                  );
-                  return (
-                    <WaveStripComps
-                      marginLeft={marginLeft}
-                      color={"#64afe9"}
-                      startTime={word.startTime}
-                      endTime={word.endTime}
-                      key={index}
-                    />
-                  );
-                })}
-              </div>
-            )}
-          </div>
-        ))}
+        {transcripts.word_timings.map((transcript, index) => {
+          const marginLeft = getMarginForWord(
+            transcript[0].startTime,
+            transcript[transcript.length-1].endTime
+          );
+          const width = getWidth(transcript[0].startTime,
+              transcript[transcript.length-1].endTime)
+          return (
+            <div key={index} style={{ marginLeft:  marginLeft , width: width }}>
+              {index % 2 === 0 ? (
+                <div className="upper-wave">
+                  {transcript.map((word, index) => {
+                    return (
+                        <div className="strip" />
+                    );
+                  })}
+                </div>
+              ) : (
+                <div className="lower-wave">
+                  {transcript.map((word, index) => {
+                    return (
+                        <div className="strip" />
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+          );
+        })}
       </div>
     </div>
   );
 };
 
-const WaveStripComps = ({ marginLeft, startTime, endTime, color }) => {
-  return (
-    <div
-      style={{
-        marginLeft,
-      }}
-    >
-      <LineWave startTime={startTime} endTime={endTime} color={color} />
-    </div>
-  );
-};
+// const WordWaveStrip = ({ startTime, endTime, color }) => {
+//   return (
+//     // <div
+//     // >
+//     //   <WaveLine startTime={startTime} endTime={endTime} color={color} />
+//     // </div>
+//   );
+// };
 
 export default WaveForm;

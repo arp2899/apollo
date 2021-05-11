@@ -1,7 +1,7 @@
 import React from "react";
-import { getUrlPath } from "../../util/util";
+import {getUrlPath} from "../../util/utils";
 import "../../style.scss";
-import Transcripts from "../transcript-words/Transcripts";
+import TranscriptWords from "./TranscriptWords";
 
 const TranscriptSection = () => {
   return (
@@ -19,7 +19,7 @@ const TranscriptSection = () => {
           />
         </form>
       </div>
-      <Transcripts />
+      <TranscriptWords />
     </div>
   );
 };

@@ -1,28 +1,22 @@
-import React, { useContext, useEffect, useRef, useState } from "react";
-import { getTimeInFormat, getUrlPath } from "../../util/util";
+import React, {useContext, useEffect, useRef} from "react";
+import {getTimeInFormat, getUrlPath} from "../../util/utils";
 import "react-h5-audio-player/lib/styles.css";
 import "../../style.scss";
 import ReactAudioPlayer from "react-h5-audio-player";
-import { ContextValues } from "../../context/ContextProvider";
+import {ContextValues} from "../../context/ContextProvider";
 
 const AudioPlayer = () => {
   const audioRef = useRef(null);
-
   const {
     timerId,
     setTimerId,
     second,
     setSecond,
-    decaSecond,
-    setDecaSecond,
+    milliSecond,
+    setMilliSecond,
     duration,
     setDuration,
   } = useContext(ContextValues);
-
-  useEffect(() => {
-    const time = second + decaSecond / 1000;
-    audioRef.current.audio.current.currentTime = time;
-  }, [decaSecond]);
 
   useEffect(() => {
     let audio = audioRef.current.audio.current;
@@ -33,34 +27,35 @@ const AudioPlayer = () => {
   }, []);
 
   useEffect(() => {
-    if (decaSecond >= 999) {
-      setSecond((second) => second + 1);
-      setDecaSecond(0);
-    }
-  }, [decaSecond]);
+    const time = second + milliSecond / 1000;
+    audioRef.current.audio.current.currentTime = time;
+  }, [milliSecond]);
 
   const onPlay = () => {
     const timerId = setInterval(
-      () => setDecaSecond((decaSecond) => decaSecond + 100),
+      () => setMilliSecond((milliSecond) => milliSecond + 100),
       100
     );
     setTimerId(timerId);
   };
 
-  const onPause = () => {
-    clearInterval(timerId);
-  };
+  useEffect(() => {
+    if (milliSecond >= 999) {
+      setSecond((second) => second + 1);
+      setMilliSecond(0);
+    }
+  }, [milliSecond]);
 
   const onEnded = () => {
     clearInterval(timerId);
     setSecond(0);
-    setDecaSecond(0);
+    setMilliSecond(0);
   };
 
   useEffect(() => {
     if (second < 0) {
       setSecond(0);
-      setDecaSecond(0);
+      setMilliSecond(0);
     }
   }, [second]);
 
@@ -70,7 +65,7 @@ const AudioPlayer = () => {
         ref={audioRef}
         src={"audio/audio.wav"}
         onPlay={onPlay}
-        onPause={onPause}
+        onPause={() => clearInterval(timerId)}
         onEnded={onEnded}
       />
       <div className="controls">
@@ -83,7 +78,7 @@ const AudioPlayer = () => {
             className="forward-image"
             alt={"forward"}
           />
-          <span className="forward-time">10</span>
+          <div className="forward-time">10</div>
         </div>
         <div
           className="rewind-button"
@@ -94,10 +89,10 @@ const AudioPlayer = () => {
             className="rewind-image"
             alt={"rewind"}
           />
-          <span className="rewind-time">10</span>
+          <div className="rewind-time">10</div>
         </div>
         <div>
-          <select className="speed-input">
+          <select className="speed-input" disabled={true}>
             <option value="1">1.00x</option>
             <option value="0.5">0.50x</option>
             <option value="0.75">0.75x</option>

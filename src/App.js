@@ -1,23 +1,24 @@
-import React, { useContext, useEffect } from "react";
+import React, {useContext, useEffect} from "react";
 import AudioPlayer from "./component/audio-player/AudioPlayer";
 import WaveForm from "./component/waveform/WaveForm";
-import ProgressSection from "./component/waveform/ProgressSection";
-import TranscriptSection from "./component/transcript-words/TranscriptSection";
-import { ContextValues } from "./context/ContextProvider";
-import useDimension from "./useDimension";
+import SeekBar from "./component/waveform/SeekBar";
+import TranscriptSection from "./component/transcript-section/TranscriptSection";
+import {ContextValues} from "./context/ContextProvider";
+import useWindowWidthHook from "./hooks/useWindowWidthHook";
 
 function App() {
   const { setSeekBarWidth } = useContext(ContextValues);
-  const { width } = useDimension();
+  const { width } = useWindowWidthHook();
 
   useEffect(() => {
-    setSeekBarWidth(width - 180);
+    setSeekBarWidth(width - 220);
   }, [width]);
+
   return (
     <div className="App">
       <AudioPlayer />
       <WaveForm />
-      <ProgressSection />
+      <SeekBar />
       <TranscriptSection />
     </div>
   );
