@@ -1,7 +1,7 @@
 import React, {useContext} from "react";
 import "../../style.scss";
 import {ContextValues} from "../../context/ContextProvider";
-import {transcriptData} from "../../util/utils";
+import {transcriptData} from "../../data";
 
 const TranscriptWords = () => {
   const { second, setSecond } = useContext(ContextValues);

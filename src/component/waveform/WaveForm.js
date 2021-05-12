@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import "../../style.scss";
 import { ContextValues } from "../../context/ContextProvider";
-import { transcriptData } from "../../util/utils";
+import { transcriptData } from "../../data";
 
 const WaveForm = () => {
   const { duration, seekBarWidth, milliSecond, second } = useContext(
